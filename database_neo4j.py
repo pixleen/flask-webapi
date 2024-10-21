@@ -12,3 +12,6 @@ def close_db():
     driver.close()
     
     
+
+
+
