@@ -1,5 +1,5 @@
 from database_neo4j import db_session
-from models.utils import node_to_dict
+from model.utils import node_to_dict
 
 
 class Order:

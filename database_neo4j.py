@@ -5,11 +5,10 @@ driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "danjon-3j
 
 
 
-def get_session():
+def db_session():
     return driver.session()
 
 def close_db():
     driver.close()
-    
     
     

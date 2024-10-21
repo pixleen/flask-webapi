@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from models.employee import Employee
+from model.employee import Employee
 
 employee_blueprint = Blueprint('employee_blueprint', __name__)
 
