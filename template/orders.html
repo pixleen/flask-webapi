@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders List</title>
+</head>
+<body>
+    <h1>Orders</h1>
+    <table border="1">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer Neo4j ID</th>
+            <th>Car Neo4j ID</th>
+            <th>Status</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer_id }}</td>
+            <td>{{ order.car_id }}</td>
+            <td>{{ order.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
