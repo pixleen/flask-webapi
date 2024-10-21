@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, url_for
 from werkzeug.utils import redirect
 
-from models.car import Car
+from model.car import Car
 
 car_blueprint = Blueprint('car_blueprint', __name__)
 
