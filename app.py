@@ -20,7 +20,7 @@ def home():
 def shutdown_session(exception=None):
     close_db()
 
-if __name__ == '__main':
+if __name__ == '__main__':
     app.run(debug=True)
 
 
