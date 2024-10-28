@@ -1,5 +1,5 @@
 from database_neo4j import db_session
-from .utils import node_to_dict  # Import the utility function
+from .utils import node_to_dict  
 
 class Customer:
     @staticmethod
@@ -12,10 +12,9 @@ class Customer:
             return result.single()[0]
 
     @staticmethod
-    def get_all():
+    def retrieve_all():
         with db_session() as session:
             result = session.run("MATCH (customer:Customer) RETURN customer, ID(customer) as id")
-            # Convert the results to a list of dictionaries, including the internal ID
             return [dict(node_to_dict(record['customer']), id=record['id']) for record in result]
 
     @staticmethod

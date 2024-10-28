@@ -4,55 +4,54 @@ from model.utils import node_to_dict
 
 class Order:
     @staticmethod
-    def order_car(customer_id, car_id):
+    def order_vehicle(customer_id, car_id):
         with db_session() as session:
             session.run(
                 "MATCH (customer:Customer) WHERE id(customer) = $customer_id "
-                "MATCH (car:Car) WHERE id(car) = $car_id AND car.status = 'available' "
-                "MERGE (customer)-[:BOOKED]->(car) "
-                "SET car.status = 'booked'",
+                "MATCH (vehice:Vehicle) WHERE id(vehicle) = $car_id AND vehicle.status = 'available' "
+                "MERGE (customer)-[:BOOKED]->(vehicle) "
+                "SET vehicle.status = 'booked'",
                 customer_id=customer_id, car_id=car_id
             )
 
     @staticmethod
-    def get_all():
+    def retrieve_all():
         with db_session() as session:
             result = session.run("""
                 MATCH (order:Order)-[:FOR_CUSTOMER]->(customer:Customer)
-                      -[:WITH_CAR]->(car:Car)
-                RETURN ID(order) as order_id, ID(customer) as customer_id, ID(car) as car_id, order.status as status
+                      -[:WITH_VEHICLE]->(vehicle:Vehicle)
+                RETURN ID(order) as order_id, ID(customer) as customer_id, ID(vehicle) as vehicle_id, order.status as status
                 """)
             return [{
                 'id': record['order_id'],
                 'customer_id': record['customer_id'],
-                'car_id': record['car_id'],
+                'vehicle_id': record['vehicle_id'],
                 'status': record['status']
             } for record in result]
 
     @staticmethod
-    def cancel_order_car(customer_id, car_id):
+    def cancel_order_vehicle(customer_id, vehicle_id):
         with db_session() as session:
             session.run(
-                "MATCH (customer:Customer)-[r:BOOKED]->(car:Car) WHERE id(customer) = $customer_id AND id(car) = $car_id "
+                "MATCH (customer:Customer)-[r:BOOKED]->(vehicle:Vehicle) WHERE id(customer) = $customer_id AND id(vehicle) = $vehicle_id "
                 "DELETE r "
-                "SET car.status = 'available'",
-                customer_id=customer_id, car_id=car_id
+                "SET vehicle.status = 'available'",
+                customer_id=customer_id, vehicle_id=vehicle_id
             )
 
     @staticmethod
-    def rent_car(customer_id, car_id):
+    def rent_car(customer_id, vehicle_id):
         with db_session() as session:
             session.run(
-                "MATCH (customer:Customer)-[:BOOKED]->(car:Car) WHERE id(customer) = $customer_id AND id(car) = $car_id "
-                "SET car.status = 'rented'",
-                customer_id=customer_id, car_id=car_id
+                "MATCH (customer:Customer)-[:BOOKED]->(vehicle:Vehicle) WHERE id(customer) = $customer_id AND id(car) = $vehicle_id "
+                "SET vehicle.status = 'rented'",
+                customer_id=customer_id, vehicle_id=vehicle_id
             )
 
     @staticmethod
-    def return_car(customer_id, car_id, status):
+    def return_car(customer_id, vehicle_id, status):
         with db_session() as session:
-            # Begin transaction
-            tx = session.begin_transaction()
+            tx = session.start_transaction()
             try:
                 # Match the booking relationship
                 result = tx.run(
@@ -63,13 +62,13 @@ class Order:
                     DELETE booking  // Correct keyword to delete the relationship
                     RETURN car
                     """,
-                    customer_id=customer_id, car_id=car_id, status=status
+                    customer_id=customer_id, car_id=vehicle_id, status=status
                 )
-                car = result.single()[0]
-                # Commit transaction
+                vehicle = result.single()[0]
+
                 tx.commit()
-                return car
+                return vehicle
             except Exception as e:
-                # Rollback transaction on error
+                
                 tx.rollback()
                 raise e

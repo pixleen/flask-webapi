@@ -30,7 +30,7 @@ class Employee:
             )
 
     @staticmethod
-    def delete(employee_id):
+    def remove(employee_id):
         with db_session() as session:
             session.run("MATCH (employee:Employee) WHERE id(employee) = $employee_id DETACH DELETE employee", employee_id=employee_id)
 
