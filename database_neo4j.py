@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase
 
 
-driver = GraphDatabase.driver("bolt://a673e1df.databases.neo4j.io", auth=("neo4j", "danjon-3joBwy-dybwoz"))
+driver = GraphDatabase.driver("neo4j+s://6f5270e8.databases.neo4j.io", auth=("zRaR1f3SAqAMIgBAVJ9Th3z5u_1wLiZjAoan2arpmrA"))
 
 
 
