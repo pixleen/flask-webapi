@@ -16,10 +16,22 @@ class Vehicle:
             return node_to_dict_2(node)  
 
     @staticmethod
+
     def retrieve_all():
         with db_session() as session:
-            result = session.run("MATCH (vehicle:Vehicle) RETURN car, ID(vehicle) as id")
-            return [dict(node_to_dict_2(record['vehicle']), id=record['id']) for record in result]
+        # Change 'Vehicle' to 'Car' if your node labels are indeed 'Car'
+            result = session.run("MATCH (vehicle:Car) RETURN vehicle, ID(vehicle) as id") 
+            vehicles = [dict(node_to_dict_2(record['vehicle']), id=record['id']) for record in result]
+        # Debugging output to verify retrieved vehicles
+        print("Retrieved vehicles:", vehicles)
+        return vehicles
+    
+    
+    # def retrieve_all():
+    #     with db_session() as session:
+    #         result = session.run("MATCH (vehicle:Vehicle) RETURN vehicle, ID(vehicle) as id") # HER LIGGER FEILEN(?)
+    #         return [dict(node_to_dict_2(record['vehicle']), id=record['id']) for record in result]
+
 
     @staticmethod
     def update(vehicle_id, json_data):
