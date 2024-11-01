@@ -15,6 +15,20 @@ def generate_vehicle():
         vehicle = Vehicle.generate_from_json(vehicle_data)  
         return redirect(url_for('vehicle_blueprint.generate_vehicles'))
 
+@vehicle_blueprint.route('/cars/', methods=['POST'])
+def create_vehicle():
+    if request.is_json:
+        vehicle_data = request.get_json()
+        try:
+            vehicle = Vehicle.generate_from_json(vehicle_data)
+            return jsonify(vehicle), 201  # Return created vehicle with 201 status
+        except ValueError as ve:
+            return jsonify({"error": str(ve)}), 400  # Bad Request if there are missing fields
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500  # Internal Server Error for other exceptions
+    else:
+        return jsonify({"error": "Request must be JSON"}), 415  # Unsupported Media Type
+
 @vehicle_blueprint.route('/', methods=['GET'])
 def generate_vehicles():
     vehicles = Vehicle.retrieve_all()
