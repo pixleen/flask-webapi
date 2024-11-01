@@ -7,9 +7,14 @@ order_blueprint = Blueprint('order_blueprint', __name__)
 def order_vehicle():
     if request.is_json:
         data = request.get_json()
-        Order.order_vehicle(data['customer_id'], data['car_id'])
-        return jsonify({"Success": "Car ordered"}), 200
+        order_details = Order.order_vehicle(data['customer_id'], data['car_id'])
+        print(order_details)
+        if order_details:
+            return jsonify({"Success": "Car ordered", "Order": order_details}), 200
+        else:
+            return jsonify({"Error": "Car could not be ordered. Vehicle may not be available."}), 400
     return jsonify({"Error": "Request must be JSON"}), 415
+
 
 @order_blueprint.route('/', methods=['GET'])
 def retrieve_orders():
