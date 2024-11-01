@@ -8,7 +8,7 @@ class Order:
         with db_session() as session:
             session.run(
                 "MATCH (customer:Customer) WHERE id(customer) = $customer_id "
-                "MATCH (vehice:Vehicle) WHERE id(vehicle) = $car_id AND vehicle.status = 'available' "
+                "MATCH (vehicle:Vehicle) WHERE id(vehicle) = $car_id AND vehicle.status = 'available' "
                 "MERGE (customer)-[:BOOKED]->(vehicle) "
                 "SET vehicle.status = 'booked'",
                 customer_id=customer_id, car_id=car_id

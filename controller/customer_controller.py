@@ -5,18 +5,16 @@ from model.customer import Customer
 
 customer_blueprint = Blueprint('customer_blueprint', __name__)
 
-@customer_blueprint.route('/', methods=['POST'])
+@customer_blueprint.route('/create', methods=['POST'])
 def generate_customer():
     if request.is_json:
         customer_info = request.get_json()
         customer = Customer.create_from_json(customer_info)
-
-        if 'text/html' in request.accept_mimetypes:
-            return redirect(url_for('customer_blueprint.get_customers'))
-        else:
-            return jsonify(customer), 201
+        return jsonify(customer), 201
     else:
-        return jsonify({"error": "Request must be JSON"}), 415
+        customer_info = request.form.to_dict()
+        customer = Customer.generate_from_json(customer_info)  
+        return redirect(url_for('customer_blueprint.generate_customer'))
 
 
 @customer_blueprint.route('/', methods=['GET'])

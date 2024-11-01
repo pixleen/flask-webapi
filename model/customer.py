@@ -9,7 +9,9 @@ class Customer:
                 "CREATE (customer:Customer {name: $name, age: $age, address: $address}) RETURN customer",
                 **json_data
             )
-            return result.single()[0]
+            customer_node = result.single()["customer"]
+            return node_to_dict(customer_node)  
+
 
     @staticmethod
     def retrieve_all():
